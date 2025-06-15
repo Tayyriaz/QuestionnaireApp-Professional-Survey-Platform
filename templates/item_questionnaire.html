@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block title %}{{ item['name'] }} Questionnaire{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-header text-center bg-primary text-white">
+                    <h2 class="h3 my-3">{{ item['name'] }}</h2>
+                </div>
+
+                <div class="card-body p-4 p-md-5">
+                    {% if item['video_path'] %}
+                    <div class="text-center mb-4">
+                        <video class="img-fluid rounded" controls style="max-height: 400px;">
+                            <source src="/{{ item['video_path'] }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    {% endif %}
+                    
+                    {% if item['explanation'] %}
+                        <div class="alert alert-info" role="alert">
+                            <i class="bi bi-info-circle-fill me-2"></i><strong>Instructions:</strong> {{ item['explanation'] }}
+                        </div>
+                    {% endif %}
+                    
+                    <div id="start-button-container" class="text-center my-4">
+                        <button id="start-questionnaire-btn" class="btn btn-primary btn-lg">
+                            <i class="bi bi-play-circle-fill me-2"></i>Start Questionnaire
+                        </button>
+                    </div>
+
+                    {% if questions %}
+                    <div id="questionnaire-form" style="display: none;">
+                        <form method="post">
+                            <!-- Progress Bar -->
+                            <div class="progress mb-4" style="height: 25px;">
+                              <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                            </div>
+
+                            {% for q in questions %}
+                            <div class="card mb-3 question-card">
+                                <div class="card-header bg-light">
+                                    <label class="form-label fw-bold mb-0">Question {{ loop.index }} of {{ questions|length }}</label>
+                                </div>
+                                <div class="card-body">
+                                    <p class="fs-5">{{ q['text'] }}</p>
+                                    {% if q['type'] == 'yesno' %}
+                                        <div class="form-check fs-5">
+                                            <input class="form-check-input" type="radio" name="q_{{ q['id'] }}" id="q_{{ q['id'] }}_yes" value="Yes" required>
+                                            <label class="form-check-label" for="q_{{ q['id'] }}_yes">Yes</label>
+                                        </div>
+                                        <div class="form-check fs-5">
+                                            <input class="form-check-input" type="radio" name="q_{{ q['id'] }}" id="q_{{ q['id'] }}_no" value="No">
+                                            <label class="form-check-label" for="q_{{ q['id'] }}_no">No</label>
+                                        </div>
+                                    {% elif q['type'] == 'number' %}
+                                        <input type="number" class="form-control" name="q_{{ q['id'] }}" required>
+                                    {% elif q['type'] == 'multiple' %}
+                                        <input type="text" class="form-control" name="q_{{ q['id'] }}" placeholder="Enter your answer" required>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                            <div class="d-grid mt-4">
+                                <button class="btn btn-success btn-lg" type="submit">
+                                    <i class="bi bi-check-circle-fill me-2"></i>Submit Answers
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    {% else %}
+                    <div class="text-center mt-4">
+                        <p class="text-muted">There are no questions for this item yet.</p>
+                        <a href="{{ url_for('welcome') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>Back to Home
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const startBtn = document.getElementById('start-questionnaire-btn');
+    const formContainer = document.getElementById('questionnaire-form');
+    const startBtnContainer = document.getElementById('start-button-container');
+
+    if (startBtn && formContainer) {
+        startBtn.addEventListener('click', function() {
+            startBtnContainer.style.display = 'none'; // Hide the button's container
+            formContainer.style.display = 'block'; // Show the form
+            // Trigger a resize or reflow to ensure progress bar animation starts correctly
+            window.dispatchEvent(new Event('resize')); 
+        });
+    }
+
+    const form = document.querySelector('form');
+    if (!form) return;
+
+    const questions = form.querySelectorAll('.question-card');
+    const totalQuestions = questions.length;
+    const progressBar = document.getElementById('progress-bar');
+
+    function updateProgress() {
+        let answeredCount = 0;
+        questions.forEach(card => {
+            // Find any input, radio group, or textarea within the card
+            const inputs = card.querySelectorAll('input[required], textarea[required]');
+            if (inputs.length > 0) {
+                // For radio buttons, check if any in the group is checked
+                if (inputs[0].type === 'radio') {
+                    const groupName = inputs[0].name;
+                    if (form.querySelector(`input[name="${groupName}"]:checked`)) {
+                        answeredCount++;
+                    }
+                } else { // For text, number, etc.
+                    // This logic assumes one input per question card for non-radio questions
+                    if (inputs[0].value.trim() !== '') {
+                        answeredCount++;
+                    }
+                }
+            }
+        });
+        
+        const percentage = totalQuestions > 0 ? (answeredCount / totalQuestions) * 100 : 0;
+        progressBar.style.width = percentage + '%';
+        progressBar.textContent = Math.round(percentage) + '%';
+        progressBar.setAttribute('aria-valuenow', percentage);
+    }
+
+    form.addEventListener('change', updateProgress);
+    form.addEventListener('input', updateProgress); // Use 'input' for better response on text fields
+    
+    // Initial check in case of browser auto-fill
+    updateProgress();
+});
+</script>
+{% endblock %} 

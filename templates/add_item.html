@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Add New Item - Admin{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-header text-center bg-primary text-white">
+                    <h3 class="fw-bold my-4">Add New Questionnaire Item</h3>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="mb-4">
+                            <label for="name" class="form-label fs-5">Item Name</label>
+                            <input type="text" class="form-control form-control-lg" id="name" name="name" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="description" class="form-label fs-5">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label for="explanation" class="form-label fs-5">Explanation (Optional)</label>
+                            <textarea class="form-control" id="explanation" name="explanation" rows="2"></textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label for="image" class="form-label fs-5">Image (Optional)</label>
+                                <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label for="video" class="form-label fs-5">Video (Optional)</label>
+                                <input type="file" class="form-control" id="video" name="video" accept="video/*">
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="d-flex justify-content-end">
+                            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary btn-lg me-3">Cancel</a>
+                            <button type="submit" class="btn btn-primary btn-lg">Add Item</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

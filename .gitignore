@@ -1,0 +1,8 @@
+# Ignore the large video file
+static/Cardiovascular_System_V5.mp4
+
+# Ignore database files
+*.db
+
+# Ignore Python cache
+__pycache__/ 

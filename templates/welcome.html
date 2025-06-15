@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% block title %}QuestionnaireApp - Professional Survey Platform{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-white">
+    <div class="container hero-container">
+        <div class="row align-items-center">
+            <div class="col-lg-4 text-center text-lg-start">
+                <div class="hero-badge">Professional Survey Platform</div>
+                <h1 class="hero-title">Create & Manage<br><span class="text-primary">Smart Questionnaires</span></h1>
+                <p class="hero-subtitle">Build professional questionnaires, collect responses, and analyze data with our comprehensive platform. Perfect for research, feedback collection, and data analysis.</p>
+                <div class="hero-buttons">
+                    <a href="{{ url_for('signup') }}" class="btn btn-primary btn-lg">Get Started <i class="bi bi-arrow-right-short"></i></a>
+                    <a href="#questionnaires" class="btn btn-outline-secondary btn-lg">View Questionnaires</a>
+                </div>
+            </div>
+            <div class="col-lg-8 d-none d-lg-block">
+                <div class="hero-image-wrapper">
+                    <img src="{{ url_for('static', filename='survey.jpeg') }}" class="img-fluid hero-main-image" alt="Create and Manage Smart Questionnaires" style="margin-left: 95px;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Available Questionnaires Section -->
+<div class="bg-light py-5" id="questionnaires">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Available Questionnaires</h2>
+            <p class="lead text-muted">Select a questionnaire to start and share your valuable feedback.</p>
+        </div>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for item in items %}
+            <div class="col">
+                <div class="card h-100 shadow-sm card-item text-center">
+                    {% if item['image_path'] %}
+                    <img src="{{ url_for('static', filename=item['image_path'].replace('static/', '')) }}" class="card-img-top" alt="{{ item['name'] }}" style="height: 200px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ item['name'] }}</h5>
+                        <p class="card-text text-muted">{{ item['description'] }}</p>
+                        <div class="mt-auto">
+                            <a href="{{ url_for('item_questionnaire', item_id=item['id']) }}" class="btn btn-outline-primary stretched-link">
+                                <i class="bi bi-play-circle-fill me-2"></i>Start Questionnaire
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col">
+                <p>No questionnaires are available at the moment. Please check back later.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="bg-white py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Why Our Platform is the Best Choice</h2>
+            <p class="lead text-muted">Discover the features that make QuestionnaireApp the perfect tool for your data collection needs.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 text-center p-4">
+                    <div class="feature-icon mb-3 mx-auto">
+                        <i class="bi bi-ui-checks-grid"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Intuitive Builder</h5>
+                    <p class="card-text text-muted">Create custom questionnaires with our easy-to-use drag-and-drop interface. No coding required.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 text-center p-4">
+                    <div class="feature-icon mb-3 mx-auto">
+                        <i class="bi bi-bar-chart-fill"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Real-Time Analytics</h5>
+                    <p class="card-text text-muted">Track responses as they come in and visualize your data with powerful, interactive charts.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 text-center p-4">
+                    <div class="feature-icon mb-3 mx-auto">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Secure & Private</h5>
+                    <p class="card-text text-muted">Your data is important. We ensure it's kept safe and private with end-to-end encryption.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- How it works section -->
+<div class="bg-light py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Get Started in 3 Simple Steps</h2>
+            <p class="lead text-muted">Launch your next survey quickly and efficiently.</p>
+        </div>
+        <div class="row text-center g-4">
+            <div class="col-md-4">
+                <div class="p-4">
+                    <h3 class="text-primary">01</h3>
+                    <h5 class="fw-bold">Sign Up</h5>
+                    <p class="text-muted">Create your free account to get started. It only takes a minute.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4">
+                    <h3 class="text-primary">02</h3>
+                    <h5 class="fw-bold">Create a Questionnaire</h5>
+                    <p class="text-muted">Use our builder to design a questionnaire that fits your needs.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4">
+                    <h3 class="text-primary">03</h3>
+                    <h5 class="fw-bold">Share & Analyze</h5>
+                    <p class="text-muted">Share your questionnaire via a link and watch the results come in.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %} 

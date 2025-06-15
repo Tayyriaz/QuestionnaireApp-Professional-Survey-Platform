@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Edit Question{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h2 class="h4 mb-0">Edit Question</h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label for="text" class="form-label">Question Text</label>
+                        <textarea class="form-control" id="text" name="text" rows="3" required>{{ question['text'] }}</textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="code" class="form-label">Question Code</label>
+                            <input type="text" class="form-control" id="code" name="code" value="{{ question['code'] }}" required>
+                            <div class="form-text">A unique identifier for this question (e.g., "Q1_HEART_RATE").</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="type" class="form-label">Question Type</label>
+                            <select class="form-select" id="type" name="type" required>
+                                <option value="yesno" {% if question['type'] == 'yesno' %}selected{% endif %}>Yes/No</option>
+                                <option value="number" {% if question['type'] == 'number' %}selected{% endif %}>Number</option>
+                                <option value="multiple" {% if question['type'] == 'multiple' %}selected{% endif %}>Multiple Choice</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <a href="{{ url_for('manage_questions', item_id=item_id) }}" class="btn btn-secondary me-2">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

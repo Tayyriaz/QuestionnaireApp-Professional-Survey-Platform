@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Edit Item{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h2 class="h4 mb-0">Edit: {{ item['name'] }}</h2>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Item Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ item['name'] }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" required>{{ item['description'] }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="explanation" class="form-label">Explanation (Optional)</label>
+                        <textarea class="form-control" id="explanation" name="explanation" rows="2">{{ item['explanation'] or '' }}</textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="image" class="form-label">Replace Image (Optional)</label>
+                            {% if item['image_path'] %}
+                                <p class="form-text">Current: <a href="/{{ item['image_path'] }}" target="_blank">{{ item['image_path'] }}</a></p>
+                            {% endif %}
+                            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="video" class="form-label">Replace Video (Optional)</label>
+                             {% if item['video_path'] %}
+                                <p class="form-text">Current: <a href="/{{ item['video_path'] }}" target="_blank">{{ item['video_path'] }}</a></p>
+                            {% endif %}
+                            <input type="file" class="form-control" id="video" name="video" accept="video/*">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary me-2">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
